@@ -11,7 +11,7 @@ const Ground = () => {
                 mixStrength={5}
                 depthScale={1}
                 minDepthThreshold={0.85}
-                color="transparent"
+                color="blue"
                 metalness={0.5}
                 roughness={0.02}
                 mirror={1}

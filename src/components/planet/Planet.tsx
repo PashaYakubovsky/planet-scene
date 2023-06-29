@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useGLTF, useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { gsap } from "gsap";
+import { lerp } from "three/src/math/MathUtils.js";
 
 // import glsl from "babel-plugin-glsl/macro";
 
@@ -25,32 +26,27 @@ const Planet = (props: GroupProps) => {
     const mouse = useThree(state => state.mouse);
 
     useEffect(() => {
-        const colorTexture = textureLoader.load("/10.png");
+        const goldMatcap = textureLoader.load("/gold.png");
         const normalTexture = textureLoader.load("/Lava_005_NORM.jpg");
-        colorTexture.mapping = THREE.EquirectangularReflectionMapping;
+        goldMatcap.mapping = THREE.EquirectangularRefractionMapping;
 
         if (materials.Atlas) {
             materials.Atlas.opacity = 1;
             materials.Atlas.transparent = false;
-
-            materials.Atlas.envMap = colorTexture;
-
+            materials.Atlas.envMap = goldMatcap;
             materials.Atlas.normalMap = normalTexture;
-
             materials.Atlas.normalScale.set(0.5, 0.5);
-            materials.Atlas.roughness = 0.2;
-            materials.Atlas.clipShadows = true;
-
+            materials.Atlas.roughness = 0;
             materials.Atlas.metalness = 1;
         }
         if (nodes.Planet_7.geometry) {
-            nodes.Planet_7.geometry.scale(2, 2, 2);
+            nodes.Planet_7.geometry.scale(3, 3, 3);
         }
     }, [gltf, materials.Atlas, nodes.Planet_7.geometry]);
 
     const scroll = useScroll();
 
-    useFrame(({ camera }) => {
+    useFrame(({ camera, clock }) => {
         if (scroll?.offset === null || scroll?.offset === undefined || !ref.current) return;
 
         // animation on scroll
@@ -66,6 +62,8 @@ const Planet = (props: GroupProps) => {
         gltf.nodes.Planet_7.rotation.y += 0.001;
         gltf.nodes.Planet_7.rotation.z += 0.001;
         gltf.nodes.Planet_7.rotation.x += 0.001;
+
+        materials.Atlas.normalScale.addScalar(clock.elapsedTime * 0.01);
     });
 
     return (
