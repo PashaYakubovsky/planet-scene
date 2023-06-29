@@ -1,0 +1,26 @@
+.planetScene {
+    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+}
+.circleAnimation {
+    background-color: rgb(61, 79, 73);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 53%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: 0.3s ease-in-out opacity;
+    z-index: -1;
+    height: 100px;
+    width: 100px;
+    &Animated {
+        opacity: 0.5;
+    }
+}
+.footer {
+    width: 100%;
+    height: 40px;
+    background-color: transparent;
+}
