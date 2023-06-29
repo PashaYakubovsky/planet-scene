@@ -23,7 +23,6 @@ const Planet = (props: GroupProps) => {
     const ref = useRef<THREE.Group>(null);
     const gltf = useGLTF("/Planet.glb") as unknown as GLTFResult;
     const { nodes, materials } = gltf;
-    const mouse = useThree(state => state.mouse);
 
     useEffect(() => {
         const goldMatcap = textureLoader.load("/gold.png");
@@ -46,7 +45,7 @@ const Planet = (props: GroupProps) => {
 
     const scroll = useScroll();
 
-    useFrame(({ camera, clock }) => {
+    useFrame(({ camera, mouse }) => {
         if (scroll?.offset === null || scroll?.offset === undefined || !ref.current) return;
 
         // animation on scroll
@@ -63,7 +62,7 @@ const Planet = (props: GroupProps) => {
         gltf.nodes.Planet_7.rotation.z += 0.001;
         gltf.nodes.Planet_7.rotation.x += 0.001;
 
-        materials.Atlas.normalScale.addScalar(clock.elapsedTime * 0.01);
+        materials.Atlas.normalScale.set(scroll.offset * mouse.x, scroll.offset * mouse.y);
     });
 
     return (
