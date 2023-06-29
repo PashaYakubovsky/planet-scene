@@ -1,9 +1,8 @@
-import { GroupProps, useFrame, useThree } from "@react-three/fiber";
+import { GroupProps, useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { useGLTF, useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { lerp } from "three/src/math/MathUtils.js";
 
 // import glsl from "babel-plugin-glsl/macro";
 
