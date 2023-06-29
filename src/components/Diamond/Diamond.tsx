@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
-import { Vector3, useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useSpring, animated } from "@react-spring/three";
 
 type GLTFResult = GLTF & {
