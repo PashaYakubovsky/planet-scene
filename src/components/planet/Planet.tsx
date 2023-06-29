@@ -25,7 +25,7 @@ const Planet = (props: GroupProps) => {
     const mouse = useThree(state => state.mouse);
 
     useEffect(() => {
-        const colorTexture = textureLoader.load("/Lava_005_COLOR.jpg");
+        const colorTexture = textureLoader.load("/10.png");
         const normalTexture = textureLoader.load("/Lava_005_NORM.jpg");
         colorTexture.mapping = THREE.EquirectangularReflectionMapping;
 
@@ -38,7 +38,9 @@ const Planet = (props: GroupProps) => {
             materials.Atlas.normalMap = normalTexture;
 
             materials.Atlas.normalScale.set(0.5, 0.5);
-            materials.Atlas.roughness = 0;
+            materials.Atlas.roughness = 0.2;
+            materials.Atlas.clipShadows = true;
+
             materials.Atlas.metalness = 1;
         }
         if (nodes.Planet_7.geometry) {

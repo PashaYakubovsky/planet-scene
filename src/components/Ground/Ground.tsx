@@ -6,12 +6,12 @@ const Ground = () => {
             <planeGeometry args={[500, 500]} />
             <MeshReflectorMaterial
                 blur={[1000, 100]}
-                resolution={720}
+                resolution={1400}
                 mixBlur={5}
                 mixStrength={5}
                 depthScale={1}
                 minDepthThreshold={0.85}
-                color="#fff"
+                color="transparent"
                 metalness={0.5}
                 roughness={0.02}
                 mirror={1}

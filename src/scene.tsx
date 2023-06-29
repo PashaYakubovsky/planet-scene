@@ -2,14 +2,17 @@ import * as THREE from "three";
 // import styles from "./scene.module.scss";
 import Planet from "./components/planet/Planet";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Sky, useScroll } from "@react-three/drei";
+import { OrbitControls, Sky, useScroll } from "@react-three/drei";
 import { useRef } from "react";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import Ground from "./components/Ground/Ground";
 import Diamond from "./components/Diamond/Diamond";
 
+const textureLoader = new THREE.TextureLoader();
+
 const Scene = () => {
+    const matcapTexture = textureLoader.load("/10.png");
     const ambientLightRef = useRef<THREE.AmbientLight>(null);
     const pointLightRef = useRef<THREE.PointLight>(null);
     const scroll = useScroll();
@@ -38,13 +41,11 @@ const Scene = () => {
 
     return (
         <>
-            <Sky
-                distance={500}
-                sunPosition={[100, -10, 28]}
-                inclination={0}
-                turbidity={0.1}
-                azimuth={0.25}
-            />
+            {/* plane object use like wall */}
+            <mesh position={[0, 0, -100]} rotation={[0, 0, 0]}>
+                <planeGeometry args={[1000, 1000]} />
+                <meshBasicMaterial envMap={matcapTexture} />
+            </mesh>
 
             <pointLight
                 ref={pointLightRef}
@@ -56,7 +57,7 @@ const Scene = () => {
             <ambientLight
                 ref={ambientLightRef}
                 color={new THREE.Color("rgb(70, 223, 240)")}
-                intensity={2}
+                intensity={20}
             />
 
             <directionalLight
@@ -65,17 +66,17 @@ const Scene = () => {
                 color={new THREE.Color("rgb(70, 223, 240)")}
             />
 
-            <Planet />
+            <Planet position={[0, -1.4, 0]} />
 
             <Ground />
 
-            {Array(50)
+            {Array(100)
                 .fill(true)
                 .map((_, i) => {
                     const randomPosition = [
                         THREE.MathUtils.randFloatSpread(10),
-                        THREE.MathUtils.randFloatSpread(20),
-                        THREE.MathUtils.randFloatSpread(20),
+                        THREE.MathUtils.randFloatSpread(10),
+                        THREE.MathUtils.randFloatSpread(10),
                     ];
 
                     const randomRotation = [
@@ -83,6 +84,8 @@ const Scene = () => {
                         THREE.MathUtils.randFloatSpread(2 * Math.PI),
                         THREE.MathUtils.randFloatSpread(2 * Math.PI),
                     ];
+
+                    console.log(randomPosition, randomRotation);
 
                     return (
                         <Diamond

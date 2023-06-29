@@ -21,6 +21,12 @@ const App = () => {
                         <Scene />
                     </ScrollControls>
                 </Canvas>
+
+                <footer className={styles.footer}>
+                    <a href="https://github.com/PashaYakubovsky" target="_blank" rel="noreferrer">
+                        Pasha Yakubovsky
+                    </a>
+                </footer>
             </MainLoader>
         </main>
     );
