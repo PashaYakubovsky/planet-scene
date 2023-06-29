@@ -74,29 +74,22 @@ const Scene = () => {
                 .map((_, i) => {
                     const randomPosition = [
                         THREE.MathUtils.randFloatSpread(10),
-                        THREE.MathUtils.randFloatSpread(10),
-                        THREE.MathUtils.randFloatSpread(10),
+                        THREE.MathUtils.randFloatSpread(20),
+                        THREE.MathUtils.randFloatSpread(20),
+                    ];
+
+                    const randomRotation = [
+                        THREE.MathUtils.randFloatSpread(2 * Math.PI),
+                        THREE.MathUtils.randFloatSpread(2 * Math.PI),
+                        THREE.MathUtils.randFloatSpread(2 * Math.PI),
                     ];
 
                     return (
-                        <Float
+                        <Diamond
                             key={i}
-                            floatingRange={[i, i]}
+                            rotation={randomRotation as unknown as THREE.Euler}
                             position={randomPosition as unknown as THREE.Vector3}
-                            speed={0.1}>
-                            <mesh>
-                                <sphereGeometry args={[0.1, 32, 32]} />
-                                <MeshReflectorMaterial
-                                    color="rgb(70, 223, 240)"
-                                    metalness={0.9}
-                                    roughness={0.1}
-                                    envMapIntensity={0.5}
-                                    mirror={1}
-                                />
-                            </mesh>
-
-                            <Diamond />
-                        </Float>
+                        />
                     );
                 })}
 
