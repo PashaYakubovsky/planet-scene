@@ -2,7 +2,7 @@ import * as THREE from "three";
 // import styles from "./scene.module.scss";
 import Planet from "./components/planet/Planet";
 import { useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Sky, useScroll } from "@react-three/drei";
+import { useScroll } from "@react-three/drei";
 import { useRef } from "react";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
