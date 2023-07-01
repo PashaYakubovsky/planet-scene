@@ -4,11 +4,11 @@ import Planet from "./components/planet/Planet";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Stars, useScroll } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
+import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
 import Ground from "./components/Ground/Ground";
 import Diamond from "./components/Diamond/Diamond";
 import { Perf } from "r3f-perf";
+import { gsap } from "gsap";
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -19,6 +19,7 @@ const Scene = () => {
     const ambientLightRef = useRef<THREE.AmbientLight>(null);
     const pointLightRef = useRef<THREE.PointLight>(null);
     const scroll = useScroll();
+    const cameraRef = useRef({ move: false });
 
     useEffect(() => {
         changeMatcapTexture(textureLoader.load("/10.png"));
@@ -28,11 +29,13 @@ const Scene = () => {
         }
     }, [query]);
 
-    useThree(({ camera }) => {
-        camera.position.set(0, 0, 10);
+    const camera = useThree(({ camera }) => {
+        camera.position.set(0, 0, 100);
+        camera.rotation.set(0, 0, 1);
+        return camera;
     });
 
-    useFrame(({ camera }) => {
+    useFrame(() => {
         if (isDebug) return;
         if (
             scroll?.offset === null ||
@@ -48,7 +51,7 @@ const Scene = () => {
         pointLightRef.current.position.z = THREE.MathUtils.lerp(scroll.offset * 5, -20, 0.1);
 
         // camera animation on scroll
-        camera.position.z = THREE.MathUtils.lerp(scroll.offset * 4 + 10, 10, 0.1);
+        // camera.position.z = THREE.MathUtils.lerp(scroll.offset * 4 + 10, 10, 0.1);
     });
 
     return (
@@ -63,7 +66,7 @@ const Scene = () => {
             {isDebug && <Perf />}
             {isDebug && <OrbitControls position={[0, 0, 20]} />}
 
-            <Stars count={500} depth={10} radius={10} factor={2} saturation={2} fade={true} />
+            <Stars count={500} depth={10} radius={10} factor={1} saturation={1} fade={true} />
 
             <pointLight
                 ref={pointLightRef}
@@ -84,9 +87,45 @@ const Scene = () => {
 
             <Ground />
 
-            <Planet position={[0, -1.4, 0]} />
+            <Planet
+                onPointerMove={e => {
+                    e.stopPropagation();
+                    // cursor with hand
+                    document.body.style.cursor = "pointer";
+                }}
+                onPointerLeave={e => {
+                    e.stopPropagation();
+                    document.body.style.cursor = "";
+                }}
+                onClick={async () => {
+                    if (cameraRef.current.move) return;
+                    cameraRef.current.move = true;
 
-            {Array(100)
+                    gsap.to(camera.position, {
+                        duration: 2.5,
+                        ease: "slow(0.7, 0.7, false)",
+                        x: 0,
+                        y: 0,
+                        z: camera.position.z <= 10 ? 100 : 9,
+                        onComplete() {
+                            cameraRef.current.move = false;
+                        },
+                    });
+                    gsap.to(camera.rotation, {
+                        x: 0,
+                        y: 0,
+                        duration: 2.5,
+                        ease: "sine.out",
+                        z: camera.rotation.z >= 1 ? 0 : 1,
+                        onComplete() {
+                            cameraRef.current.move = false;
+                        },
+                    });
+                }}
+                position={[0, -1.4, 0]}
+            />
+
+            {Array(10)
                 .fill(true)
                 .map((_, i) => {
                     const randomPosition = [
@@ -111,15 +150,7 @@ const Scene = () => {
                 })}
 
             <EffectComposer>
-                <Bloom
-                    blendFunction={BlendFunction.SCREEN}
-                    luminanceThreshold={0.9}
-                    luminanceSmoothing={0.9}
-                    height={300}
-                    opacity={1}
-                />
-
-                <Vignette eskil={false} offset={0.01} darkness={0.1} />
+                <DepthOfField />
             </EffectComposer>
         </>
     );

@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import Scene from "./Scene";
+import Scene from "./scene";
 import styles from "./App.module.scss";
 import { ScrollControls } from "@react-three/drei";
 import { useRef } from "react";
@@ -16,8 +16,11 @@ const App = () => {
                     ref={mainRef}
                     gl={{
                         powerPreference: "high-performance",
+                        antialias: false,
+                        stencil: false,
                         pixelRatio: Math.min(window.devicePixelRatio, 2),
-                    }}>
+                    }}
+                >
                     <Physics>
                         <ScrollControls pages={5} damping={1}>
                             <Scene />
