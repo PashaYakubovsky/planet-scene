@@ -3,8 +3,7 @@ import { useEffect, useRef } from "react";
 import { useGLTF, useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { gsap } from "gsap";
-
-// import glsl from "babel-plugin-glsl/macro";
+import { useSphere } from "@react-three/cannon";
 
 interface GLTFResult {
     nodes: {
@@ -19,7 +18,15 @@ interface GLTFResult {
 const textureLoader = new THREE.TextureLoader();
 
 const Planet = (props: GroupProps) => {
-    const ref = useRef<THREE.Group>(null);
+    const [ref, api] = useSphere(() => ({
+        redius: 1,
+        mass: 0,
+        position: [0, 0, 0],
+        velocity: [0, 0, 0],
+        linearDamping: 0.9,
+        angularDamping: 0.9,
+    }));
+    // const ref = useRef<THREE.Group>(null);
     const gltf = useGLTF("/Planet.glb") as unknown as GLTFResult;
     const { nodes, materials } = gltf;
 
@@ -44,22 +51,21 @@ const Planet = (props: GroupProps) => {
 
     const scroll = useScroll();
 
-    useFrame(({ camera, mouse }) => {
+    useFrame(({ mouse }) => {
         if (scroll?.offset === null || scroll?.offset === undefined || !ref.current) return;
 
-        // animation on scroll
-        camera.position.z = THREE.MathUtils.lerp(scroll.offset * 15, 0, 0.1);
+        // gsap.to(ref.current.rotation, {
+        //     x: mouse.y,
+        //     z: mouse.x,
+        //     duration: 10,
+        //     ease: "ease",
+        // });
 
-        gsap.to(ref.current.rotation, {
-            x: mouse.y,
-            z: mouse.x,
-            duration: 10,
-            ease: "ease",
-        });
+        api.rotation.set(mouse.y, mouse.x, 0);
 
-        gltf.nodes.Planet_7.rotation.y += 0.001;
-        gltf.nodes.Planet_7.rotation.z += 0.001;
-        gltf.nodes.Planet_7.rotation.x += 0.001;
+        // gltf.nodes.Planet_7.rotation.y += 0.001;
+        // gltf.nodes.Planet_7.rotation.z += 0.001;
+        // gltf.nodes.Planet_7.rotation.x += 0.001;
 
         materials.Atlas.normalScale.set(scroll.offset * mouse.x, scroll.offset * mouse.y);
     });
