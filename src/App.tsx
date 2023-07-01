@@ -1,7 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import Scene from "./scene";
 import styles from "./App.module.scss";
-import { ScrollControls } from "@react-three/drei";
 import { useRef } from "react";
 import MainLoader from "./components/loaders/MainLoader";
 import { Physics } from "@react-three/cannon";
@@ -10,8 +9,8 @@ const App = () => {
     const mainRef = useRef<HTMLCanvasElement>(null);
 
     return (
-        <main className={styles.planetScene}>
-            <MainLoader>
+        <MainLoader>
+            <main className={styles.planetScene}>
                 <Canvas
                     ref={mainRef}
                     gl={{
@@ -22,9 +21,7 @@ const App = () => {
                     }}
                 >
                     <Physics>
-                        <ScrollControls pages={5} damping={1}>
-                            <Scene />
-                        </ScrollControls>
+                        <Scene />
                     </Physics>
                 </Canvas>
 
@@ -33,8 +30,8 @@ const App = () => {
                         Pasha Yakubovsky
                     </a>
                 </footer>
-            </MainLoader>
-        </main>
+            </main>
+        </MainLoader>
     );
 };
 

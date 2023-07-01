@@ -1,6 +1,6 @@
 import { GroupProps, useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { useGLTF, useScroll } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useSpring, animated, config } from "@react-spring/three";
 
@@ -40,10 +40,8 @@ const Planet = (props: GroupProps) => {
         }
     }, [gltf, materials.Atlas, nodes.Planet_7.geometry]);
 
-    const scroll = useScroll();
-
     useFrame(({ mouse }) => {
-        if (scroll?.offset === null || scroll?.offset === undefined || !ref.current) return;
+        if (!ref.current) return;
 
         setSpringProps({ rotation: [mouse.x, mouse.y, 0], config: { ...config.molasses } });
 

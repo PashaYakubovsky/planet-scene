@@ -1,6 +1,6 @@
 import * as THREE from "three";
 // import styles from "./scene.module.scss";
-import Planet from "./components/planet/Planet";
+// import Planet from "./components/planet/Planet";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Stars, useScroll } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -9,6 +9,7 @@ import Ground from "./components/Ground/Ground";
 import Diamond from "./components/Diamond/Diamond";
 import { Perf } from "r3f-perf";
 import { gsap } from "gsap";
+import BlackHole from "./components/BlackHole";
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -87,7 +88,45 @@ const Scene = () => {
 
             <Ground />
 
-            <Planet
+            <BlackHole
+                onPointerMove={e => {
+                    e.stopPropagation();
+                    // cursor with hand
+                    document.body.style.cursor = "pointer";
+                }}
+                onPointerLeave={e => {
+                    e.stopPropagation();
+                    document.body.style.cursor = "";
+                }}
+                onClick={async () => {
+                    if (cameraRef.current.move) return;
+                    cameraRef.current.move = true;
+
+                    gsap.to(camera.position, {
+                        duration: 2.5,
+                        ease: "slow(0.7, 0.7, false)",
+                        x: 0,
+                        y: 0,
+                        z: camera.position.z <= 40 ? 100 : 39,
+                        onComplete() {
+                            cameraRef.current.move = false;
+                        },
+                    });
+                    gsap.to(camera.rotation, {
+                        x: 0,
+                        y: 0,
+                        duration: 2.5,
+                        ease: "sine.out",
+                        z: camera.rotation.z >= 1 ? 0 : 1,
+                        onComplete() {
+                            cameraRef.current.move = false;
+                        },
+                    });
+                }}
+                position={[0, -20, 0]}
+            />
+
+            {/* <Planet
                 onPointerMove={e => {
                     e.stopPropagation();
                     // cursor with hand
@@ -123,7 +162,7 @@ const Scene = () => {
                     });
                 }}
                 position={[0, -1.4, 0]}
-            />
+            /> */}
 
             {Array(10)
                 .fill(true)
