@@ -10,6 +10,7 @@ import Diamond from "./components/Diamond/Diamond";
 import { Perf } from "r3f-perf";
 import { gsap } from "gsap";
 import BlackHole from "./components/BlackHole";
+import Planet from "./components/planet/Planet";
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -88,7 +89,7 @@ const Scene = () => {
 
             <Ground />
 
-            <BlackHole
+            {/* <BlackHole
                 onPointerMove={e => {
                     e.stopPropagation();
                     // cursor with hand
@@ -124,9 +125,9 @@ const Scene = () => {
                     });
                 }}
                 position={[0, -20, 0]}
-            />
+            /> */}
 
-            {/* <Planet
+            <Planet
                 onPointerMove={e => {
                     e.stopPropagation();
                     // cursor with hand
@@ -162,7 +163,7 @@ const Scene = () => {
                     });
                 }}
                 position={[0, -1.4, 0]}
-            /> */}
+            />
 
             {Array(10)
                 .fill(true)
