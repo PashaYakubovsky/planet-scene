@@ -9,7 +9,7 @@ import Ground from "./components/Ground/Ground";
 import Diamond from "./components/Diamond/Diamond";
 import { Perf } from "r3f-perf";
 import { gsap } from "gsap";
-import BlackHole from "./components/BlackHole";
+// import BlackHole from "./components/BlackHole";
 import Planet from "./components/planet/Planet";
 
 const textureLoader = new THREE.TextureLoader();
